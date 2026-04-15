@@ -1,88 +1,102 @@
-import StatsBar from "./StatsBar";
 
-export default function StatsPage({ data = [], timelineCount = 0 }) {
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-  // ❌ If no data → show nothing
-  if (!data || data.length === 0) {
+export default function StatsPage({ data = [] }) {
+
+  // ✅ COLORS (your requirement)
+  const COLORS = {
+    call: "#1a6fa3",   // blue
+    text: "#55c1db",   // blue
+    video: "#2a7d5c",  // green
+    meetup: "#f59e0b", // optional
+  };
+
+  // ✅ If no data → show empty state
+  if (!data.length) {
     return (
-      <div style={{
-        maxWidth: "900px",
-        margin: "40px auto",
-        textAlign: "center",
-        fontFamily: "'DM Sans', sans-serif",
-        color: "#7a9aaa"
-      }}>
-        <h2 style={{ marginBottom: "10px" }}>Friendship Analytics</h2>
-        <p>No interactions yet. Start connecting! 👇</p>
+      <div style={{ textAlign: "center", padding: "80px" }}>
+        <h2>No data yet</h2>
+        <p style={{ color: "#7a9aaa" }}>
+          Click Call, Text, or Video to generate stats
+        </p>
       </div>
     );
   }
 
-  // ✅ Calculate total
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-
   return (
     <div style={{
-      maxWidth: "900px",
-      margin: "40px auto",
-      padding: "20px",
+      maxWidth: "800px",
+      margin: "0 auto",
+      padding: "40px 20px",
+      textAlign: "center"
     }}>
-      <h2 style={{
-        fontFamily: "'Playfair Display', serif",
-        fontSize: "28px",
-        marginBottom: "20px"
+      {/* TITLE */}
+      <h1 style={{
+        fontFamily: "'Playfair Display', Georgia, serif",
+        fontSize: "32px",
+        fontWeight: 800,
+        marginBottom: "30px"
       }}>
         Friendship Analytics
-      </h2>
+      </h1>
 
-      {/* ✅ GRAPH (Donut style using simple CSS) */}
+      {/* CARD */}
       <div style={{
         background: "#fff",
         borderRadius: "16px",
         padding: "30px",
-        border: "1px solid #e8eff3",
-        textAlign: "center"
+        boxShadow: "0 2px 10px rgba(0,0,0,0.05)"
       }}>
-        <p style={{ marginBottom: "20px", color: "#4a7a8a" }}>
+        <h3 style={{
+          marginBottom: "20px",
+          color: "#4a7a8a",
+          fontSize: "18px", // ✅ bigger
+          textAlign :"center"
+        }}>
           By Interaction Type
-        </p>
+        </h3>
 
-        {/* DONUT */}
+        {/* CHART */}
         <div style={{
-          width: "160px",
-          height: "160px",
-          borderRadius: "50%",
-          margin: "0 auto",
-          background: `conic-gradient(
-            #2a7d5c ${(data.find(d => d.label === "call")?.value || 0) / total * 100}%,
-            #1a6fa3 ${(data.find(d => d.label === "sms")?.value || 0) / total * 100}% ${(data.find(d => d.label === "sms")?.value || 0 + (data.find(d => d.label === "call")?.value || 0)) / total * 100}%,
-            #7c3aed ${(data.find(d => d.label === "video")?.value || 0) / total * 100}%,
-            #ff9800 ${(data.find(d => d.label === "meetup")?.value || 0) / total * 100}%
-          )`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}>
-          <div style={{
-            width: "80px",
-            height: "80px",
-            borderRadius: "50%",
-            background: "#fff"
-          }} />
-        </div>
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center"
+}}>
+        <PieChart width={350} height={300}>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="label"
+            cx="50%"
+            cy="45%"
+            innerRadius={60}
+            outerRadius={100}
+            paddingAngle={3}
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={index}
+                fill={COLORS[entry.label] || "#ccc"}
+              />
+            ))}
+          </Pie>
 
-        {/* LEGEND */}
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "16px",
-          marginTop: "20px"
-        }}>
-          {data.map(item => (
-            <div key={item.label} style={{ fontSize: "12px" }}>
-              ● {item.label}
-            </div>
-          ))}
+          <Tooltip />
+
+          {/* ✅ CUSTOM LEGEND */}
+          <Legend
+            formatter={(value) => (
+              <span style={{
+                color: COLORS[value] || "#333",
+                fontSize: "16px",   // ✅ bigger text
+                fontWeight: 600
+              }}>
+                {value}
+              </span>
+            )}
+          />
+        </PieChart>
         </div>
       </div>
     </div>
