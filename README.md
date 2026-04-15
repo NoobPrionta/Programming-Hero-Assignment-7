@@ -1,6 +1,6 @@
-# KeenKeeper React App
+# KeenKeeper — React App
 
-## Setup
+## Quick Start
 
 ```bash
 npm create vite@latest keenkeeper -- --template react
@@ -8,34 +8,45 @@ cd keenkeeper
 npm install
 ```
 
-Then **replace** the generated `src/` folder with the files from this download.
+Replace the generated `src/` folder with the files from this download.
 
 ## Add Google Fonts
 
-In your `index.html` `<head>`:
+Paste this in `index.html` inside `<head>`:
 
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
 ```
 
 ## File Structure
 
 ```
 src/
-├── App.jsx                   ← Root app, handles page routing
+├── App.jsx                   ← Root — shared timeline state & toast system
 ├── data/
-│   └── mockData.js           ← All sample data (friends, interactions, stats)
+│   └── mockData.js           ← Friends data + DiceBear avatar URLs
 └── components/
-    ├── Navbar.jsx             ← Top nav bar with Home / Timeline / Stats
-    ├── Footer.jsx             ← Dark footer with social links
-    ├── HeroBanner.jsx         ← Hero section with "Add a Friend" button
-    ├── StatsBar.jsx           ← 4 summary stat cards (Total, On Track, etc.)
-    ├── FriendCard.jsx         ← Individual friend card with sticker avatar
-    ├── FriendGrid.jsx         ← Grid wrapper for all FriendCards
-    ├── FriendDetail.jsx       ← Full friend detail page (click a card)
-    ├── Timeline.jsx           ← Chronological interaction list with filter
-    └── StatsPage.jsx          ← Donut chart analytics page
+    ├── Navbar.jsx             ← Sticky nav, hamburger menu on mobile
+    ├── Footer.jsx             ← Dark footer
+    ├── HeroBanner.jsx         ← Hero with "Add a Friend" CTA
+    ├── StatsBar.jsx           ← 4 live stat cards (2×2 on mobile)
+    ├── FriendCard.jsx         ← Card with real photo avatar
+    ├── FriendGrid.jsx         ← Responsive card grid
+    ├── FriendDetail.jsx       ← Detail page — Call/Text/Video log to timeline
+    ├── Timeline.jsx           ← Starts EMPTY, fills as interactions logged
+    ├── StatsPage.jsx          ← SVG donut chart analytics
+    └── Toast.jsx              ← Animated toast notification
 ```
+
+## Key Features
+
+- **Timeline starts empty** — entries only appear when you click Call / Text / Video on a Friend Detail page
+- **Toast notifications** — appear bottom-right whenever an interaction is logged
+- **Real avatars** via DiceBear Personas API (no auth required)
+- **Fully responsive** — hamburger nav on mobile, 2-column grids on small screens, fluid `clamp()` spacing throughout
 
 ## Run
 

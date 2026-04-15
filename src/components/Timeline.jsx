@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 const TYPE_CONFIG = {
-  Meetup: { icon: "🤝", color: "#fff3e0", border: "#f5c842" },
-  Text:   { icon: "💬", color: "#e8f0ff", border: "#6495ed" },
-  Call:   { icon: "📞", color: "#e8f8f0", border: "#2a7d5c" },
-  Video:  { icon: "🎥", color: "#f3e8ff", border: "#8b5cf6" },
+  Call:   { icon: "📞", bg: "#e8f8f0", border: "#2a7d5c", label: "Call"   },
+  Text:   { icon: "💬", bg: "#e8f0ff", border: "#6495ed", label: "Text"   },
+  Video:  { icon: "🎥", bg: "#f3e8ff", border: "#8b5cf6", label: "Video"  },
+  Meetup: { icon: "🤝", bg: "#fff3e0", border: "#f5c842", label: "Meetup" },
 };
 
-const FILTER_OPTIONS = ["All", "Meetup", "Text", "Call", "Video"];
+const FILTERS = ["All", "Call", "Text", "Video"];
 
 export default function Timeline({ interactions = [] }) {
   const [filter, setFilter] = useState("All");
@@ -18,99 +18,159 @@ export default function Timeline({ interactions = [] }) {
 
   return (
     <div style={{
-      maxWidth: "680px",
+      maxWidth: "700px",
       margin: "0 auto",
-      padding: "32px 24px",
+      padding: "clamp(20px,4vw,40px) clamp(12px,3vw,24px)",
       fontFamily: "'DM Sans', sans-serif",
     }}>
+      {/* Header */}
       <h1 style={{
         fontFamily: "'Playfair Display', Georgia, serif",
         fontWeight: 800,
-        fontSize: "28px",
+        fontSize: "clamp(22px,4vw,32px)",
         color: "#1a3c4d",
-        marginBottom: "20px",
+        marginBottom: "8px",
       }}>
         Timeline
       </h1>
+      <p style={{ color: "#7a9aaa", fontSize: "14px", marginBottom: "24px" }}>
+        Your interaction history — logged from each friend's Quick Check-In.
+      </p>
 
-      {/* Filter dropdown */}
-      <select
-        value={filter}
-        onChange={e => setFilter(e.target.value)}
-        style={{
-          background: "#fff",
-          border: "1.5px solid #d0e4ee",
-          borderRadius: "8px",
-          padding: "9px 16px",
-          fontSize: "14px",
-          fontFamily: "'DM Sans', sans-serif",
-          fontWeight: 600,
-          color: "#1a3c4d",
-          cursor: "pointer",
-          marginBottom: "24px",
-          outline: "none",
-          minWidth: "180px",
-        }}
-      >
-        {FILTER_OPTIONS.map(opt => (
-          <option key={opt} value={opt}>Filter: {opt}</option>
+      {/* Filter pills */}
+      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "24px" }}>
+        {FILTERS.map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            style={{
+              padding: "7px 18px",
+              borderRadius: "20px",
+              border: "1.5px solid",
+              borderColor: filter === f ? "#1a3c4d" : "#d0e4ee",
+              background: filter === f ? "#1a3c4d" : "#fff",
+              color: filter === f ? "#fff" : "#4a7a8a",
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 700,
+              fontSize: "13px",
+              cursor: "pointer",
+              transition: "all 0.16s",
+            }}
+          >
+            {f}
+          </button>
         ))}
-      </select>
+      </div>
+
+      {/* Empty state */}
+      {interactions.length === 0 && (
+        <div style={{
+          textAlign: "center",
+          padding: "clamp(48px,8vw,80px) 24px",
+          background: "#fff",
+          borderRadius: "16px",
+          border: "2px dashed #d0e4ee",
+        }}>
+          <div style={{ fontSize: "52px", marginBottom: "16px" }}>📭</div>
+          <h3 style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 700, fontSize: "20px", color: "#1a3c4d", marginBottom: "10px",
+          }}>
+            No interactions yet
+          </h3>
+          <p style={{ color: "#7a9aaa", fontSize: "14px", maxWidth: "320px", margin: "0 auto" }}>
+            Go to a friend's profile and tap <strong>Call</strong>, <strong>Text</strong>, or <strong>Video</strong> to log your first interaction!
+          </p>
+        </div>
+      )}
+
+      {/* Filtered empty */}
+      {interactions.length > 0 && filtered.length === 0 && (
+        <div style={{ textAlign: "center", color: "#7a9aaa", padding: "48px 0", fontSize: "14px" }}>
+          No <strong>{filter}</strong> interactions logged yet.
+        </div>
+      )}
 
       {/* Entries */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         {filtered.map((item, i) => {
           const cfg = TYPE_CONFIG[item.type] || TYPE_CONFIG.Text;
           return (
-            <div key={i} style={{
-              background: "#fff",
-              border: "1.5px dashed #c8dde8",
-              borderRadius: "12px",
-              padding: "14px 18px",
-              display: "flex",
-              alignItems: "center",
-              gap: "14px",
-              transition: "box-shadow 0.17s",
-              cursor: "default",
-            }}
+            <div
+              key={item.id || i}
+              style={{
+                background: "#fff",
+                border: "1.5px solid #e0ecf2",
+                borderLeft: `4px solid ${cfg.border}`,
+                borderRadius: "12px",
+                padding: "clamp(12px,2vw,16px) clamp(14px,2.5vw,20px)",
+                display: "flex",
+                alignItems: "center",
+                gap: "clamp(10px,2vw,16px)",
+                transition: "box-shadow 0.17s",
+                animation: "fadeSlideIn 0.35s ease both",
+              }}
               onMouseEnter={e => e.currentTarget.style.boxShadow = "0 4px 16px rgba(26,60,77,0.09)"}
               onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}
             >
+              {/* Icon badge */}
               <div style={{
-                width: "38px", height: "38px",
+                width: "clamp(36px,5vw,44px)", height: "clamp(36px,5vw,44px)",
                 borderRadius: "10px",
-                background: cfg.color,
+                background: cfg.bg,
                 border: `1.5px solid ${cfg.border}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "18px",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "clamp(16px,2.5vw,20px)",
                 flexShrink: 0,
               }}>
                 {cfg.icon}
               </div>
 
-              <div>
-                <div style={{ fontWeight: 700, fontSize: "14px", color: "#1a3c4d" }}>
-                  {item.type}{" "}
-                  <span style={{ fontWeight: 500, color: "#4a7a8a" }}>
-                    with {item.person}
-                  </span>
+              {/* Text */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{
+                  fontWeight: 700,
+                  fontSize: "clamp(13px,1.8vw,15px)",
+                  color: "#1a3c4d",
+                  whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                }}>
+                  {item.type} with{" "}
+                  <span style={{ color: "#2a7d5c" }}>{item.person}</span>
                 </div>
-                <div style={{ fontSize: "12px", color: "#7a9aaa", marginTop: "2px" }}>
+                <div style={{ fontSize: "12px", color: "#7a9aaa", marginTop: "3px" }}>
                   {item.date}
                 </div>
               </div>
+
+              {/* Type pill */}
+              <span style={{
+                background: cfg.bg,
+                color: cfg.border,
+                borderRadius: "20px",
+                padding: "3px 12px",
+                fontSize: "11px",
+                fontWeight: 700,
+                flexShrink: 0,
+                display: "none",   // shown on wider screens via CSS
+              }}
+                className="kk-type-pill"
+              >
+                {cfg.label}
+              </span>
             </div>
           );
         })}
-
-        {filtered.length === 0 && (
-          <div style={{ textAlign: "center", color: "#7a9aaa", padding: "40px 0", fontSize: "14px" }}>
-            No interactions found for this filter.
-          </div>
-        )}
       </div>
+
+      <style>{`
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0);    }
+        }
+        @media (min-width: 480px) {
+          .kk-type-pill { display: inline-block !important; }
+        }
+      `}</style>
     </div>
   );
 }
