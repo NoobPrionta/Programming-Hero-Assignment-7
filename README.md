@@ -1,55 +1,49 @@
-# KeenKeeper — React App
+📘 KeenKeeper – Relationship Management Dashboard
 
-## Quick Start
+KeenKeeper is a modern web-based dashboard designed to help users manage and nurture personal relationships. It provides insights, reminders, and interaction tracking to ensure meaningful connections are maintained over time.
 
-```bash
-npm create vite@latest keenkeeper -- --template react
-cd keenkeeper
-npm install
-```
-
-Replace the generated `src/` folder with the files from this download.
-
-## Add Google Fonts
-
-Paste this in `index.html` inside `<head>`:
-
-```html
-<link
-  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap"
-  rel="stylesheet"
-/>
-```
-
-## File Structure
-
-```
-src/
-├── App.jsx                   ← Root — shared timeline state & toast system
-├── data/
-│   └── mockData.js           ← Friends data + DiceBear avatar URLs
-└── components/
-    ├── Navbar.jsx             ← Sticky nav, hamburger menu on mobile
-    ├── Footer.jsx             ← Dark footer
-    ├── HeroBanner.jsx         ← Hero with "Add a Friend" CTA
-    ├── StatsBar.jsx           ← 4 live stat cards (2×2 on mobile)
-    ├── FriendCard.jsx         ← Card with real photo avatar
-    ├── FriendGrid.jsx         ← Responsive card grid
-    ├── FriendDetail.jsx       ← Detail page — Call/Text/Video log to timeline
-    ├── Timeline.jsx           ← Starts EMPTY, fills as interactions logged
-    ├── StatsPage.jsx          ← SVG donut chart analytics
-    └── Toast.jsx              ← Animated toast notification
-```
-
-## Key Features
-
-- **Timeline starts empty** — entries only appear when you click Call / Text / Video on a Friend Detail page
-- **Toast notifications** — appear bottom-right whenever an interaction is logged
-- **Real avatars** via DiceBear Personas API (no auth required)
-- **Fully responsive** — hamburger nav on mobile, 2-column grids on small screens, fluid `clamp()` spacing throughout
-
-## Run
-
-```bash
-npm run dev
-```
+🚀 Features
+🏠 Dashboard
+Overview of total friends, interactions, and pending actions
+Quick statistics like:
+Total Friends
+On Track
+Need Attention
+Interactions This Month
+Friend cards with status indicators
+👤 Friend Details
+Individual profile view
+Key metrics:
+Days since last contact
+Total interactions
+Next due date
+Relationship goal tracking
+Quick action buttons:
+📞 Call
+💬 Text
+🎥 Video
+🕒 Timeline
+Chronological interaction history
+Includes:
+Calls
+Messages
+Meetups
+Videos
+Filterable activity log
+📊 Statistics (Analytics)
+Visual representation of interaction types
+Donut chart for:
+Calls
+Texts
+Videos
+Helps analyze communication habits
+📌 Footer Section
+Consistent branding across pages
+Social links
+Privacy & Terms links
+🛠️ Tech Stack
+Frontend: React.js
+Styling: Tailwind CSS
+Icons/UI: (optional) Lucide / Heroicons
+Charts: Recharts / Chart.js
+Build Tool: Vite
